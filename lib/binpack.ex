@@ -42,7 +42,7 @@ defmodule Binpack do
               {container, [item | items]}
             else
               # try to pack the item to the container
-              {updated_container, updated_item} = pack_to_container(container, item)
+              {_fits, updated_container, updated_item} = pack_to_container(container, item)
 
               # append to linked list
               {updated_container, [updated_item | items]}
@@ -67,11 +67,14 @@ defmodule Binpack do
       else
         # container already contains items
         # walk through every axis
-        Enum.reduce(0..3, {false, container, item}, fn axis, {fits?, container, item} ->
+        Enum.reduce(0..2, {false, container, item}, fn axis, {fits?, container, item} ->
           if fits? do
             # skip
             {fits?, container, item}
           else
+            IO.inspect(item.item.data)
+            IO.inspect(axis, label: "axis")
+
             # walk through every item that is already placed
             container.placed_items
             |> Enum.reduce({fits?, container, item}, fn placed_item, {fits?, container, item} ->
@@ -89,6 +92,9 @@ defmodule Binpack do
                     1 -> [position_x, position_y + height, position_z]
                     2 -> [position_x, position_y, position_z + depth]
                   end
+
+                IO.inspect(placed_item.position, label: "it's here")
+                IO.inspect(position, label: "try this")
 
                 put_item_in_container(container, item, position)
               end

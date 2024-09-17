@@ -1,6 +1,6 @@
 # Binpack
 
-**TODO: Add description**
+Attempt to implement Binpack algorithm in Elixir. Heavily inspired by https://github.com/enzoruiz/3dbinpacking and https://github.com/gedex/bp3d
 
 ## Installation
 
@@ -18,4 +18,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/binpack>.
-

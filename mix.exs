@@ -8,7 +8,10 @@ defmodule Binpack.MixProject do
       elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      name: "Binpack",
+      organization: "dkln",
+      package: package()
     ]
   end
 
@@ -24,6 +27,18 @@ defmodule Binpack.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+    ]
+  end
+
+  defp package do
+    [
+      name: "binpack",
+      files: ~w(lib .formatter.exs mix.exs README*),
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/dkln/binpack",
+        "Docs" => "https://hexdocs.pm/binpack"
+      }
     ]
   end
 
