@@ -67,14 +67,11 @@ defmodule Binpack do
       else
         # container already contains items
         # walk through every axis
-        Enum.reduce(0..2, {false, container, item}, fn axis, {fits?, container, item} ->
+        Enum.reduce(0..2, {false, container, item}, fn move_axis, {fits?, container, item} ->
           if fits? do
             # skip
             {fits?, container, item}
           else
-            IO.inspect(item.item.data)
-            IO.inspect(axis, label: "axis")
-
             # walk through every item that is already placed
             container.placed_items
             |> Enum.reduce({fits?, container, item}, fn placed_item, {fits?, container, item} ->
@@ -86,15 +83,13 @@ defmodule Binpack do
                 [width, height, depth] = Item.Placement.get_dimension(placed_item)
                 [position_x, position_y, position_z] = placed_item.position
 
+                # move next to placed item
                 position =
-                  case axis do
+                  case move_axis do
                     0 -> [position_x + width, position_y, position_z]
                     1 -> [position_x, position_y + height, position_z]
                     2 -> [position_x, position_y, position_z + depth]
                   end
-
-                IO.inspect(placed_item.position, label: "it's here")
-                IO.inspect(position, label: "try this")
 
                 put_item_in_container(container, item, position)
               end
@@ -128,11 +123,17 @@ defmodule Binpack do
               |> Item.Placement.set_rotation(rotation)
               |> Item.Placement.set_position(position)
 
-            if Container.Placement.is_item_within_boundaries?(container, updated_item, position) &&
-                 Container.Placement.is_not_intersecting_other_items?(
-                   container,
-                   updated_item
-                 ) do
+            fits? =
+              Container.Placement.is_item_within_boundaries?(container, updated_item, position)
+
+            fits? =
+              fits? &&
+                Container.Placement.is_not_intersecting_other_items?(
+                  container,
+                  updated_item
+                )
+
+            if fits? do
               {true, rotation}
             else
               {false, rotation}

@@ -22,7 +22,39 @@ defmodule BinpackTest do
         |> Pack.add_item(item_2)
         |> Pack.add_item(item_3)
 
-      assert Binpack.pack(pack) == []
+      assert Binpack.pack(pack) == [
+               %Container.Placement{
+                 container: %Container{
+                   data: "big box",
+                   depth: 50,
+                   height: 50,
+                   item_margin: 0,
+                   max_weight: 50,
+                   width: 50
+                 },
+                 placed_items: [
+                   %Item.Placement{
+                     item: %Item{data: "1", depth: 3, height: 2, weight: 1, width: 5},
+                     placed: true,
+                     position: [13, 0, 0],
+                     rotation: 0
+                   },
+                   %Item.Placement{
+                     item: %Item{data: "3", depth: 2, height: 4, weight: 3, width: 7},
+                     placed: true,
+                     position: [6, 0, 0],
+                     rotation: 0
+                   },
+                   %Item.Placement{
+                     item: %Item{data: "2", depth: 4, height: 5, weight: 2, width: 6},
+                     placed: true,
+                     position: [0, 0, 0],
+                     rotation: 0
+                   }
+                 ],
+                 unfitted_items: []
+               }
+             ]
     end
   end
 end

@@ -142,14 +142,18 @@ defmodule Binpack.Item do
 
     ## Examples
 
-        iex> item_1 = %Binpack.Item.Placement{position: [0, 0, 0], item: %Binpack.Item{width: 5, height: 10, depth: 15}}
+        iex> item_1 = %Binpack.Item.Placement{position: [0, 0, 0], item: %Binpack.Item{width: 5, height: 10, depth: 10}}
         ...> item_2 = %Binpack.Item.Placement{position: [0, 0, 0], item: %Binpack.Item{width: 3, height: 8, depth: 13}}
         ...> Binpack.Item.Placement.intersects?(item_1, item_2)
         true
-        iex> item_1 = Binpack.Item.Placement.set_position(item_1, [6, 0, 0])
+        iex> item_2 = Binpack.Item.Placement.set_position(item_2, [2, 0, 0])
+        ...> Binpack.Item.Placement.intersects?(item_1, item_2)
+        true
+        iex> item_2 = Binpack.Item.Placement.set_position(item_2, [5, 0, 0])
         ...> Binpack.Item.Placement.intersects?(item_1, item_2)
         false
-        iex> item_1 = Binpack.Item.Placement.set_rotation(item_1, 1)
+        iex> item_2 = Binpack.Item.Placement.set_position(item_2, [5, 0, 0])
+        ...> item_1 = Binpack.Item.Placement.set_rotation(item_1, 1)
         ...> Binpack.Item.Placement.intersects?(item_1, item_2)
         true
 
@@ -173,8 +177,8 @@ defmodule Binpack.Item do
       ix = Enum.max([cx_1, cx_2]) - Enum.min([cx_1, cx_2])
       iy = Enum.max([cy_1, cy_2]) - Enum.min([cy_1, cy_2])
 
-      ix < Enum.at(dimension_item_1, x) + Enum.at(dimension_item_2, x) / 2 &&
-        iy < Enum.at(dimension_item_1, y) + Enum.at(dimension_item_2, y) / 2
+      ix < (Enum.at(dimension_item_1, x) + Enum.at(dimension_item_2, x)) / 2 &&
+        iy < (Enum.at(dimension_item_1, y) + Enum.at(dimension_item_2, y)) / 2
     end
   end
 end

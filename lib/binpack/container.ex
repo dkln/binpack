@@ -1,18 +1,21 @@
 defmodule Binpack.Container do
   alias __MODULE__
 
-  defstruct width: 0,
-            height: 0,
+  defstruct data: nil,
             depth: 0,
-            max_weight: 0,
-            data: nil
+            height: 0,
+            # TODO: implement configurable margins of containers
+            item_margin: 0,
+            width: 0,
+            max_weight: 0
 
   @type t :: %__MODULE__{
-          width: non_neg_integer(),
-          height: non_neg_integer(),
+          data: any(),
           depth: non_neg_integer(),
-          max_weight: non_neg_integer(),
-          data: any()
+          height: non_neg_integer(),
+          item_margin: non_neg_integer(),
+          width: non_neg_integer(),
+          max_weight: non_neg_integer()
         }
 
   @doc """
