@@ -124,7 +124,7 @@ defmodule Binpack do
               |> Item.Placement.set_position(position)
 
             fits? =
-              Container.Placement.is_item_within_boundaries?(container, updated_item, position)
+              Container.Placement.is_item_within_boundaries?(container, updated_item)
 
             fits? =
               fits? &&

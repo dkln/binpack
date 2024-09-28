@@ -129,37 +129,36 @@ defmodule Binpack.Container do
 
     ## Examples
 
-        iex> item = %Binpack.Item.Placement{item: %Binpack.Item{width: 10, height: 20, depth: 15}}
+        iex> item = %Binpack.Item.Placement{item: %Binpack.Item{width: 10, height: 20, depth: 15}, position: [0, 0, 0]}
         ...> container = %Binpack.Container.Placement{container: %Binpack.Container{width: 20, height: 30, depth: 20}}
-        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item, [0, 0, 0])
+        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item)
         true
-        iex> Binpack.Container.Placement.is_item_within_boundaries?(container, item, [10, 0, 0])
+        iex> item = Binpack.Item.Placement.set_position(item, [10, 0, 0])
+        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item)
         true
-        iex> Binpack.Container.Placement.is_item_within_boundaries?(container, item, [11, 0, 0])
+        iex> item = Binpack.Item.Placement.set_position(item, [11, 0, 0])
+        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item)
         false
-        iex> item = Binpack.Item.Placement.set_rotation(item, 1)
-        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item, [10, 0, 0])
+        iex> item = Binpack.Item.Placement.set_position(item, [10, 0, 0])
+        ...> item = Binpack.Item.Placement.set_rotation(item, 1)
+        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item)
         false
         iex> item = Binpack.Item.Placement.set_rotation(item, 5)
-        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item, [10, 0, 0])
+        ...> Binpack.Container.Placement.is_item_within_boundaries?(container, item)
         true
 
     """
-    @spec is_item_within_boundaries?(Container.Placement.t(), Item.Placement.t(), list(number())) ::
-            boolean()
+    @spec is_item_within_boundaries?(Container.Placement.t(), Item.Placement.t()) :: boolean()
     def is_item_within_boundaries?(
           %Container.Placement{} = container_placement,
-          %Item.Placement{} = item_placement,
-          pivot
-        )
-        when is_list(pivot) do
-      [pivot_width, pivot_height, pivot_depth] = pivot
-
+          %Item.Placement{} = item_placement
+        ) do
       [item_width, item_height, item_depth] = Item.Placement.get_dimension(item_placement)
+      [item_x, item_y, item_z] = item_placement.position
 
-      if container_placement.container.width < pivot_width + item_width ||
-           container_placement.container.height < pivot_height + item_height ||
-           container_placement.container.depth < pivot_depth + item_depth do
+      if container_placement.container.width < item_x + item_width ||
+           container_placement.container.height < item_y + item_height ||
+           container_placement.container.depth < item_z + item_depth do
         false
       else
         true
